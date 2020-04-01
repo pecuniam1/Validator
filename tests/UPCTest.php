@@ -8,7 +8,7 @@ class UPCTest extends TestCase
 	/**
 	 * @dataProvider validUPCProvider
 	 */
-	public function testvalidUPC($valid_upc, $number_system, $manufacturer_code, $product_code)
+	public function testvalidUPC($valid_upc, $number_system, $manufacturer_code, $product_code, $checksum)
 	{
 		$class = new TestClass();
 		$class->setUPC($valid_upc);
@@ -16,6 +16,16 @@ class UPCTest extends TestCase
 		$this->assertSame($class->getNumberSystem(), $number_system);
 		$this->assertSame($class->getManufacturerCode(), $manufacturer_code);
 		$this->assertSame($class->getProductCode(), $product_code);
+		$this->assertSame(substr($valid_upc, -1), $checksum);
+	}
+	
+	/**
+	 * @dataProvider validProductType
+	 */
+	public function testProductType($product_code, $description)
+	{
+		$class = new TestClass();
+		$this->assertSame($class->getProductType($product_code), $description);
 	}
 
 	/**
@@ -28,8 +38,23 @@ class UPCTest extends TestCase
 		$this->expectException(\InvalidArgumentException::class);
 	}
 
-
 	/** providers **/
+
+	public function validProductType()
+	{
+		return [
+			[0, "Product"],
+			[1, "Product"],
+			[2, "Variable weight item"],
+			[3, "Pharmaceutical"],
+			[4, "Local Use"],
+			[5, "Coupon"],
+			[6, "Product"],
+			[7, "Product"],
+			[8, "Product"],
+			[9, "Product"],
+		];
+	}
 
 	public function invalidTypeProvider()
 	{

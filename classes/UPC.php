@@ -78,7 +78,7 @@ class UPC
 	 *
 	 * @return int
 	 */
-	private function calculateChecksum($upc) : int
+	public function calculateChecksum($upc) : int
 	{
 		$upc_array = str_split(substr($upc, 0, strlen($upc) - 1));
 		$odd_numbers = array_sum(array_filter($upc_array, function ($key) {
